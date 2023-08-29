@@ -1,0 +1,325 @@
+html,
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+abbr,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+samp,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+body {
+    font-family: sans-serif;
+    line-height: 1;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+nav ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+a {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+
+
+
+/* change colours to suit your needs */
+
+ins {
+    background-color: #ff9;
+    color: #000;
+    text-decoration: none;
+}
+
+
+
+
+/* change colours to suit your needs */
+
+mark {
+    background-color: #ff9;
+    color: #000;
+    font-style: italic;
+    font-weight: bold;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+abbr[title],
+dfn[title] {
+    border-bottom: 1px dotted;
+    cursor: help;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+
+
+/* change border colour to suit your needs */
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #cccccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+input,
+select {
+    vertical-align: middle;
+}
+
+sub,
+sup {
+
+    font-size: 45%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+sup {
+    top: -0.8em;
+
+}
+
+/* ---------------------------------- Styles ---------------------------------- */
+
+html {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    image-rendering: -webkit-optimize-contrast;
+}
+
+#container {
+    width: 1000px;
+    height: 100%;
+    overflow: hidden;
+    cursor: pointer;
+    display: grid;
+    grid-template-rows: 1fr;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+    padding: 20px;
+
+    background: #d9f6fa;
+    color: white;
+    border: 1px solid #808080;
+}
+
+
+/* ---------------------------------- BACKGROUND ELEMENTS ---------------------------------- */
+
+
+#nameHolder {
+    position: relative;
+    width: 300px;
+    height: 450px;
+    color: white;
+    border-radius: 10px;
+    background-color: rgb(59, 15, 93);
+    display: grid;
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+}
+
+#nameHolder input[type="submit"]{
+    background-color: aqua;
+    border-radius: 10px;
+    color: #551294;
+}
+
+#noName{
+    position: absolute;
+    width: 300px;
+    height: 150px;
+    top: 200px;
+    left: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: rgb(255, 0, 72);
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+/* #noName p{
+    position: relative;
+    vertical-align:middle;
+} */
+
+#welcome{
+    position: absolute;
+    width: 300px;
+    height: 150px;
+    top: 200px;
+    left: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    text-align: center;
+    background-color: rgb(43, 210, 143);
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+#tipoAutoHolder{
+    position: relative;
+    width: 300px;
+    height: 450px;
+    color: white;
+    border-radius: 10px;
+    background-color: rgb(59, 15, 93);
+    display: grid;
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+}
+
+#tipoAutoHolder #tipoAuto {
+    height: 40px;
+}
+
+#precioContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  #precioContainer label {
+    margin-right: 10px;
+  }
+  
+  #precioContainer p {
+    margin: 0;
+  }
+  
+/*------------------ JS Switching Classes ------------------- */
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: inline-block;
+}
