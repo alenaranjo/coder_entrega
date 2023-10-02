@@ -1,61 +1,126 @@
-const misProductos = [
-    { id: 1, nombre: 'arroz', precio: 1500 },
-    { id: 2, nombre: 'cereal', precio: 1000 },
-    { id: 3, nombre: 'leche', precio: 800 },
-    { id: 4, nombre: 'pastas', precio: 900 },
-    { id: 5, nombre: 'galletas', precio: 970 },
-    { id: 6, nombre: 'refresco', precio: 700 },
-];
+document.addEventListener("DOMContentLoaded", function () {
+    const selectedProducts = new Map();
+    const productButtons = document.querySelectorAll('.producto');
+    const cart = document.getElementById('cart');
+    const totalSinIVA = document.getElementById('totalSinIVA');
+    const iva = document.getElementById('iva');
+    const totalConIVA = document.getElementById('totalConIVA');
+    const clearCartButton = document.getElementById('clear-cart');
+    const editCartButton = document.getElementById('edit-cart');
 
-const carritoDeCompras = [];
+    let edicionHabilitada = false; // Variable para habilitar la edición
 
-function mostrarProductos(productos) {
-    let listaProductos = "";
-    let precioTotal = 0;
-
-    for (const producto of productos) {
-        listaProductos += `NOMBRE: ${producto.nombre.charAt(0).toUpperCase() + producto.nombre.slice(1)}\nPRECIO: ${producto.precio}\nCANTIDAD: ${producto.cantidad}\n\n`;
-        precioTotal += producto.precio * producto.cantidad;
+    // Cargar datos del carrito desde sessionStorage al cargar la página
+    const savedCart = sessionStorage.getItem('cart');
+    if (savedCart) {
+        const parsedCart = JSON.parse(savedCart);
+        parsedCart.forEach(item => {
+            selectedProducts.set(item.id, item);
+        });
+        renderCart();
     }
 
-    const iva = precioTotal * 0.13;
-    const precioTotalConIva = precioTotal + iva;
+    // Función para renderizar el carrito
+    function renderCart() {
+        cart.innerHTML = '';
 
-    return `Productos seleccionados:\n\n${listaProductos}\nPrecio total sin IVA: ${precioTotal}\nIVA (13%): ${iva}\nPrecio total con IVA: ${precioTotalConIva}`;
-}
+        let totalPrecioSinIVA = 0;
 
-function agregarProductosAlCarrito() {
-    const productosDisponibles = misProductos.map(producto => `${producto.nombre.charAt(0).toUpperCase() + producto.nombre.slice(1)}, Precio ${producto.precio}`).join('\n');
-    const input = prompt(`**Productos disponibles:**\n\n${productosDisponibles}\n\nEscriba los productos que desea comprar junto con la cantidad, separados por coma (por ejemplo, Leche 2, Pastas 2)`); // Solicitar entrada al usuario
-    const seleccionUsuario = input.split(',').map(seleccion => seleccion.trim().toLowerCase()); // Dividir la entrada y limpiar espacios
+        // Convertir el mapa de productos a una matriz para guardar en sessionStorage
+        const cartArray = Array.from(selectedProducts.values());
 
-    for (const seleccion of seleccionUsuario) {
-        const [nombreProducto, cantidad] = seleccion.split(' ');
-        const producto = misProductos.find(item => item.nombre === nombreProducto);
+        // Guardar el carrito actualizado en sessionStorage
+        sessionStorage.setItem('cart', JSON.stringify(cartArray));
 
-        if (producto && cantidad && !isNaN(cantidad)) {
-            const productoEnCarrito = {
-                nombre: nombreProducto.charAt(0).toUpperCase() + nombreProducto.slice(1),
-                precio: producto.precio,
-                cantidad: parseInt(cantidad)
-            };
-            carritoDeCompras.push(productoEnCarrito);
-        } else {
-            alert(`El producto "${nombreProducto}" no existe en el inventario o la cantidad es incorrecta.`);
-        }
+        cartArray.forEach((product) => {
+            const row = document.createElement('div');
+            row.classList.add('cart-item');
+            row.innerHTML = `
+                <p>${product.nombre}, Cantidad: <span class="${edicionHabilitada ? 'editable' : ''}" contenteditable="${edicionHabilitada ? 'true' : 'false'}">${product.cantidad}</span>, Precio: $${(product.cantidad * product.precio).toFixed(2)}</p>
+            `;
+
+            const cantidadEditable = row.querySelector('span');
+
+            // Escucha el evento 'click' para seleccionar todo el texto en el campo de cantidad
+            cantidadEditable.addEventListener('click', () => {
+                cantidadEditable.style.fontSize = '15px'; // Aumenta el tamaño de fuente al hacer clic
+                const range = document.createRange();
+                range.selectNodeContents(cantidadEditable);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+            });
+
+            // Escucha el evento 'input' para actualizar la cantidad y el precio cuando se edita
+            cantidadEditable.addEventListener('input', () => {
+                const nuevaCantidad = parseInt(cantidadEditable.textContent);
+                if (!isNaN(nuevaCantidad) && nuevaCantidad > 0) {
+                    product.cantidad = nuevaCantidad;
+                    // Actualiza el precio
+                    cantidadEditable.parentElement.lastElementChild.textContent = `$${(product.cantidad * product.precio).toFixed(2)}`;
+                }
+                // Actualiza la lista de productos seleccionados
+                renderCart();
+
+                // Restaurar el tamaño de fuente original (12px) después de cambiar la cantidad
+                cantidadEditable.style.fontSize = '12px';
+            });
+
+            cart.appendChild(row);
+
+            totalPrecioSinIVA += product.cantidad * product.precio;
+        });
+
+        const totalPrecioConIVA = totalPrecioSinIVA * 1.13;
+
+        // Actualiza los totales
+        totalSinIVA.textContent = totalPrecioSinIVA.toFixed(2);
+        iva.textContent = (totalPrecioSinIVA * 0.13).toFixed(2);
+        totalConIVA.textContent = totalPrecioConIVA.toFixed(2);
     }
 
-    const continuar = prompt("¿Desea agregar otro producto? (Si/No)").toLowerCase();
+    productButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const productId = button.id;
+            const productPrecio = parseFloat(button.getAttribute('data-precio'));
 
-    if (continuar === "si") {
-        agregarProductosAlCarrito();
-    }
-}
+            if (selectedProducts.has(productId)) {
+                // Si el producto ya está en el carrito, aumenta la cantidad y actualiza el precio
+                const product = selectedProducts.get(productId);
+                product.cantidad++;
+                product.precio += productPrecio;
+            } else {
+                // Si es un nuevo producto, crea una entrada en el carrito
+                selectedProducts.set(productId, {
+                    id: productId,
+                    nombre: productId.charAt(0).toUpperCase() + productId.slice(1), // Primera letra en mayúscula
+                    cantidad: 1,
+                    precio: productPrecio,
+                });
+            }
 
-agregarProductosAlCarrito(); // Llamada inicial para agregar productos al carrito
+            // Actualiza la lista de productos seleccionados
+            renderCart();
+        });
+    });
 
-if (carritoDeCompras.length > 0) {
-    alert(mostrarProductos(carritoDeCompras));
-} else {
-    alert("No se seleccionaron productos válidos.");
-}
+    // Manejar el botón de limpiar carrito
+    clearCartButton.addEventListener('click', () => {
+        selectedProducts.clear();
+        sessionStorage.removeItem('cart'); // Limpiar también los datos de sessionStorage
+        renderCart();
+    });
+
+    // Manejar el botón de editar lista
+    editCartButton.addEventListener('click', () => {
+        edicionHabilitada = !edicionHabilitada; // Cambiar el estado de edición
+        const cantidadEditable = document.querySelectorAll('.cart-item span[contenteditable="false"]');
+        cantidadEditable.forEach(editable => {
+            editable.contentEditable = edicionHabilitada ? 'true' : 'false'; // Habilitar o deshabilitar la edición
+            if (!edicionHabilitada) {
+                editable.textContent = ''; // Limpia el contenido inicial si se deshabilita la edición
+                cantidadEditable.style.fontSize = '12px'; // Restaurar el tamaño de fuente original
+            }
+        });
+    });
+});

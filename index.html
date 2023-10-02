@@ -6,11 +6,46 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Entrega 2</title>
+    <title>Entrega 3</title>
 
 </head>
 
 <body>
+    <div class="container">
+        <h1 id="productos_disponibles">Productos Disponibles</h1>
+        <ul class="product-list">
+            <li>
+                <button class="producto" id="arroz" data-precio="1500">Arroz</button>
+            </li>
+            <li>
+                <button class="producto" id="cereal" data-precio="1000">Cereal</button>
+            </li>
+            <li>
+                <button class="producto" id="leche" data-precio="800">Leche</button>
+            </li>
+            <li>
+                <button class="producto" id="pastas" data-precio="900">Pastas</button>
+            </li>
+            <li>
+                <button class="producto" id="galletas" data-precio="970">Galletas</button>
+            </li>
+            <li>
+                <button class="producto" id="refresco" data-precio="700">Refresco</button>
+            </li>
+        </ul>
+        <div class="selected-products">
+            <h2>Productos Seleccionados</h2>
+            <div id="cart-container">
+                <!-- Lista de productos seleccionados -->
+                <div id="cart"></div>
+            </div><br>
+            <p class="total-label"><b>Total sin IVA:</b> $<span id="totalSinIVA">0.00</span></p>
+            <p class="total-label"><b>IVA (13%):</b> $<span id="iva">0.00</span></p>
+            <p class="total-label"><b>Total con IVA:</b> $<span id="totalConIVA">0.00</span></p>
+            <button id="clear-cart" class="btn_clear">Limpiar Carrito</button>
+            <button id="edit-cart" class="btn_edit">Editar Lista</button>
+        </div>
+    </div>
 
 </body>
 <script src="code/script.js"></script>
