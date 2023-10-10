@@ -13,26 +13,38 @@
 <body>
     <div class="container">
         <h1 id="productos_disponibles">Productos Disponibles</h1>
-        <ul class="product-list">
-            <li>
-                <button class="producto" id="arroz" data-precio="1500">Arroz</button>
-            </li>
-            <li>
-                <button class="producto" id="cereal" data-precio="1000">Cereal</button>
-            </li>
-            <li>
-                <button class="producto" id="leche" data-precio="800">Leche</button>
-            </li>
-            <li>
-                <button class="producto" id="pastas" data-precio="900">Pastas</button>
-            </li>
-            <li>
-                <button class="producto" id="galletas" data-precio="970">Galletas</button>
-            </li>
-            <li>
-                <button class="producto" id="refresco" data-precio="700">Refresco</button>
-            </li>
-        </ul>
+        <div class="producto-container">
+            <div class="producto-card">
+                <h3>Arroz</h3>
+                <p class="precio">Precio: $1500</p>
+                <button class="producto" id="arroz" data-precio="1500">Agregar</button>
+            </div>
+            <div class="producto-card">
+                <h3>Cereal</h3>
+                <p class="precio">Precio: $1000</p>
+                <button class="producto" id="cereal" data-precio="1000">Agregar</button>
+            </div>
+            <div class="producto-card">
+                <h3>Leche</h3>
+                <p class="precio">Precio: $800</p>
+                <button class="producto" id="leche" data-precio="800">Agregar</button>
+            </div>
+            <div class="producto-card">
+                <h3>Pastas</h3>
+                <p class="precio">Precio: $900</p>
+                <button class="producto" id="pastas" data-precio="900">Agregar</button>
+            </div>
+            <div class="producto-card">
+                <h3>Galletas</h3>
+                <p class="precio">Precio: $970</p>
+                <button class="producto" id="galletas" data-precio="970">Agregar</button>
+            </div>
+            <div class="producto-card">
+                <h3>Refresco</h3>
+                <p class="precio">Precio: $700</p>
+                <button class="producto" id="refresco" data-precio="700">Agregar</button>
+            </div>
+        </div>
         <div class="selected-products">
             <h2>Productos Seleccionados</h2>
             <div id="cart-container">
@@ -43,10 +55,8 @@
             <p class="total-label"><b>IVA (13%):</b> $<span id="iva">0.00</span></p>
             <p class="total-label"><b>Total con IVA:</b> $<span id="totalConIVA">0.00</span></p>
             <button id="clear-cart" class="btn_clear">Limpiar Carrito</button>
-            <button id="edit-cart" class="btn_edit">Editar Lista</button>
         </div>
-    </div>
-
+    </div>        
 </body>
 <script src="code/script.js"></script>
 
