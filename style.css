@@ -1,72 +1,5 @@
-html,
-body,
-div,
-span,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-abbr,
-address,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-samp,
-small,
-strong,
-sub,
-sup,
-var,
-b,
-i,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section,
-summary,
-time,
-mark,
-audio,
-video {
+/* Reset de estilos para ciertos elementos HTML */
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video {
     margin: 0;
     padding: 0;
     border: 0;
@@ -81,17 +14,7 @@ body {
     line-height: 1;
 }
 
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section {
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
     display: block;
 }
 
@@ -99,15 +22,11 @@ nav ul {
     list-style: none;
 }
 
-blockquote,
-q {
+blockquote, q {
     quotes: none;
 }
 
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
+blockquote:before, blockquote:after, q:before, q:after {
     content: '';
     content: none;
 }
@@ -120,22 +39,14 @@ a {
     background: transparent;
 }
 
-
-
-
-/* change colours to suit your needs */
-
+/* Cambia colores según tus necesidades */
 ins {
     background-color: #ff9;
     color: #000;
     text-decoration: none;
 }
 
-
-
-
-/* change colours to suit your needs */
-
+/* Cambia colores según tus necesidades */
 mark {
     background-color: #ff9;
     color: #000;
@@ -147,8 +58,7 @@ del {
     text-decoration: line-through;
 }
 
-abbr[title],
-dfn[title] {
+abbr[title], dfn[title] {
     border-bottom: 1px dotted;
     cursor: help;
 }
@@ -158,11 +68,7 @@ table {
     border-spacing: 0;
 }
 
-
-
-
-/* change border colour to suit your needs */
-
+/* Cambia el color del borde según tus necesidades */
 hr {
     display: block;
     height: 1px;
@@ -172,14 +78,11 @@ hr {
     padding: 0;
 }
 
-input,
-select {
+input, select {
     vertical-align: middle;
 }
 
-sub,
-sup {
-
+sub, sup {
     font-size: 45%;
     line-height: 0;
     position: relative;
@@ -192,10 +95,9 @@ sup {
 
 sup {
     top: -0.8em;
-
 }
 
-/* ---------------------------------- Styles ---------------------------------- */
+/* ---------------------------------- Estilos ---------------------------------- */
 
 html {
     -ms-text-size-adjust: 100%;
@@ -216,6 +118,10 @@ body {
     height: 100vh;
 }
 
+#productos_disponibles {
+    padding: 0 0 20px 0;
+}
+
 .container {
     background-color: white;
     border-radius: 10px;
@@ -223,7 +129,18 @@ body {
     width: 450px;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    transition: height 1s ease;
+    animation: grow cubic-bezier(0.23, 1, 0.320, 1) forwards;
+}
+
+@keyframes grow {
+    from {
+        max-height: 0;
+        opacity: 0;
+    }
+    to {
+        max-height: 2000px;
+        opacity: 1;
+    }
 }
 
 h1 {
@@ -235,12 +152,13 @@ h1 {
 .producto-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px; /* Espacio entre los elementos */
+    gap: 10px;
 }
 
 .producto-card {
-    background-color: white;
+    background: linear-gradient(180deg, #ffffff81, #afc7fb);
     border-radius: 10px;
+    width: 100%;
     padding: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     text-align: center;
@@ -250,12 +168,6 @@ h1 {
 .producto-card h3 {
     font-size: 15px;
     color: #333;
-}
-
-.producto-card .precio {
-    font-weight: bold;
-    font-size: 13px;
-    margin: 5px 0;
 }
 
 .producto-card button {
@@ -273,12 +185,11 @@ h1 {
     padding: 6px 15px;
     text-decoration: none;
     text-shadow: 0px 1px 0px #004d92;
-    transition: transform 0.3s;
+    transition: transform 0.3s, background-color 0.3s;
 }
 
 .producto-card button:hover {
-    background: linear-gradient(to bottom, #005ea3 5%, #19a4ea 100%);
-    background-color: #51f3ff;
+    background: linear-gradient(to bottom, #04a0ed 5%, #005ea3 100%);
     transform: scale(1.1);
 }
 
@@ -297,86 +208,78 @@ h1 {
     align-items: center;
 }
 
-.cart-item h3 {
-    font-size: 12px;
-    margin-bottom: 5px;
-    flex: 1;
+.cart-item h3, .cart-item p, .producto-card .precio {
+    font-size: 15px;
+    margin: 10px;
+    display: inline; 
 }
 
 .cart-item p {
-    margin: 5px 0;
+    margin-left: 10px; 
 }
 
 .cart-item .btn-edit-remove {
     display: flex;
     align-items: center;
+    gap: 10px; 
 }
 
-.cart-item button {
-    box-shadow: inset 0px 1px 0px 0px #7571e2;
-    background: linear-gradient(to bottom, #0077b3 5%, #005ea3 100%);
-    background-color: #0077b3;
-    color: #ffffff;
+.btn-clear.agregar, .btn-clear.quitar, .btn-clear.borrar {
+    padding: 6px 15px;
+    font-size: 12px;
+    cursor: pointer;
     border: none;
     border-radius: 6px;
-    padding: 5px 8px;
-    font-size: 11px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    transition: transform 0.3s;
+    margin-top: 5px;
+    transition: background-color 0.3s ease, transform 0.3s;
 }
 
-.cart-item button:hover {
-    background: linear-gradient(to bottom, #005ea3 5%, #19a4ea 100%);
-    background-color: #51f3ff;
+.btn-clear.agregar:hover {
+    background: linear-gradient(to bottom, #51fa57 5%, #45A049 100%);
     transform: scale(1.1);
 }
 
-.btn_delete button {
-    position: absolute;
-    background-color: #b3002a;
+.btn-clear.quitar:hover {
+    background: linear-gradient(to bottom, #cecece 5%, #5A5A5A 100%);
+    transform: scale(1.1);
+}
+
+.btn-clear.borrar:hover {
+    background: linear-gradient(to bottom, #ff7300 5%, #B30909 100%);
+    transform: scale(1.1);
+}
+
+.btn-clear.agregar {
+    background: linear-gradient(to bottom, #0CCE6B 5%, #009E52 100%);
     color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    padding: 5px 8px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    transition: transform 0.3s;
 }
 
-.cart-item .btn-delete {
-    background-color: transparent;
-    color: #FF5555;
-    border: none;
-    border-radius: 0;
-    padding: 0;
-    font-size: 20px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    cursor: pointer;
-    transition: color 0.3s ease;
+.btn-clear.quitar {
+    background: linear-gradient(to bottom, #8F8F8F 5%, #5A5A5A 100%);
+    color: #ffffff;
 }
 
-.cart-item .btn-remove:hover {
-    color: #FF0000;
+.btn-clear.borrar {
+    background: linear-gradient(to bottom, #ed3a08 5%, #b40303 100%);
+    color: #ffffff;
 }
 
-/* Selected Products */
+/* Productos Seleccionados */
 .selected-products {
     display: block;
     text-align: left;
-    background: linear-gradient(180deg, #6ad7f8, #5874d8);
+    background: linear-gradient(180deg, #6ad7f8, #40036f);
     border-radius: 7px;
     padding: 15px;
     margin-top: 15px;
-    transition: height 1s ease; 
+    transition: height 1s ease;
     align-items: center;
 }
 
 .total-label {
     font-weight: bold;
+    color: white;
+    text-shadow: black;
 }
 
 .btn_clear {
@@ -397,11 +300,11 @@ h1 {
     text-shadow: 0px 1px 0px #920404;
     margin: 15px 15px 0 0;
     cursor: pointer;
-    transition: .3s;
+    transition: 0.3s;
 }
 
 .btn_clear:hover {
-    background: linear-gradient(to bottom, #a30909 5%, #b40303 100%);
+    background: linear-gradient(to bottom, #ed3a08 5%, #b40303 100%);
     background-color: #a30909;
     transform: scale(1.1);
     transition: transform 0.3s;
@@ -412,13 +315,14 @@ h1 {
     top: 1px;
 }
 
-.btn_edit {
+/* BOTON COMPRAR */
+.purchase {
     text-align: center;
-    box-shadow: inset 0px 1px 0px 0px #a4e271;
-    background: linear-gradient(to bottom, #89c403 5%, #77a809 100%);
-    background-color: #89c403;
+    box-shadow: inset 0px 1px 0px 0px #038236;
+    background: linear-gradient(to bottom, #0CCE6B 5%, #009E52 100%);
+    background-color: #03b41e;
     border-radius: 6px;
-    border: 1px solid #74b807;
+    border: 1px solid #03b41e;
     display: inline-block;
     cursor: pointer;
     color: #ffffff;
@@ -427,20 +331,46 @@ h1 {
     font-weight: bold;
     padding: 6px 15px;
     text-decoration: none;
-    text-shadow: 0px 1px 0px #528009;
-    margin-top: 5px;
+    text-shadow: 0px 1px 0px #920404;
+    margin: 15px 15px 0 0;
     cursor: pointer;
-    transition: .3s;
+    transition: 0.3s;
 }
 
-.btn_edit:hover {
-    background: linear-gradient(to bottom, #77a809 5%, #89c403 100%);
-    background-color: #77a809;
+.purchase:hover {
+    background: linear-gradient(to bottom, #51ff57 5%, #45A049 100%);
+    background-color: #03b41e;
     transform: scale(1.1);
     transition: transform 0.3s;
 }
 
-.btn_edit:active {
-    position: relative;
-    top: 1px
+/* POST CARD */
+.post-card{
+    background: linear-gradient(180deg, #ffffff81, #afc7fb);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    font-size:14px;
+    list-style: none;
+
+    width: 97%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    margin: 5px;
+}
+
+.post-card:hover{
+    background-color: #0cceb1;
+    /* cursor: pointer; */
+    transform: scale(1.03);
+}
+
+.popup-card {
+    background: linear-gradient(180deg, #ffffffdd, #afc7fb);
+    border-radius: 10px;
+    width: 65%;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: transform 0.3s;
 }

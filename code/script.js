@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
     const products = [
-        {id: 'arroz',nombre: 'Arroz',precio: 1500,},
-        {id: 'cereal',nombre: 'Cereal',precio: 1000,},
-        {id: 'leche',nombre: 'Leche',precio: 800,},
-        {id: 'pastas',nombre: 'Pastas',precio: 900,},
-        {id: 'galletas',nombre: 'Galletas',precio: 970,},
-        {id: 'refresco',nombre: 'Refresco',precio: 700,},
+        { id: 'arroz', nombre: 'Arroz', precio: 1500 },
+        { id: 'cereal', nombre: 'Cereal', precio: 1000 },
+        { id: 'leche', nombre: 'Leche', precio: 800 },
+        { id: 'pastas', nombre: 'Pastas', precio: 900 },
+        { id: 'galletas', nombre: 'Galletas', precio: 970 },
+        { id: 'refresco', nombre: 'Refresco', precio: 700 },
     ];
 
     const selectedProducts = new Map();
@@ -15,8 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const iva = document.getElementById('iva');
     const totalConIVA = document.getElementById('totalConIVA');
     const clearCartButton = document.getElementById('clear-cart');
+    const purchase = document.getElementById('purchase');
 
-    // Cargar datos del carrito desde localStorage al cargar la página
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
         const parsedCart = JSON.parse(savedCart);
@@ -26,26 +26,21 @@ document.addEventListener("DOMContentLoaded", function () {
         renderCart();
     }
 
-    // Función para calcular el precio total de un producto
     function calcularPrecioTotal(product) {
         return product.cantidad * product.precio;
     }
 
-    // Función para renderizar el carrito
     function renderCart() {
         cart.innerHTML = '';
 
         let totalPrecioSinIVA = 0;
-
-        // Actualizar el precio de cada producto en el carrito
+        
         selectedProducts.forEach((product) => {
             product.precioTotal = calcularPrecioTotal(product);
         });
 
-        // Convertir el mapa de productos a una matriz para guardar en localStorage
         const cartArray = Array.from(selectedProducts.values());
 
-        // Guardar el carrito actualizado en localStorage
         localStorage.setItem('cart', JSON.stringify(cartArray));
 
         cartArray.forEach((product) => {
@@ -56,9 +51,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     <h3>${product.nombre}</h3>
                     <p class="precio">Total: $${(product.precioTotal).toFixed(2)}</p>
                     <p>Cantidad: <span>${product.cantidad}</span></p>
-                    <button class="btn_clear" onclick="removeItem('${product.id}')">Borrar</button>
-                    <button class="btn_clear" onclick="decreaseQuantity('${product.id}')">Quitar uno</button>
-                    <button class="btn_clear" onclick="addQuantity('${product.id}')">Agregar otro</button>
+                    <button class="btn-clear agregar" onclick="addQuantity('${product.id}')">Agregar otro</button>
+                    <button class="btn-clear quitar" onclick="decreaseQuantity('${product.id}')">Quitar uno</button>
+                    <button class="btn-clear borrar" onclick="removeItem('${product.id}')">Borrar</button>
                 </div>
             `;
 
@@ -81,63 +76,174 @@ document.addEventListener("DOMContentLoaded", function () {
             const productPrecio = parseFloat(button.getAttribute('data-precio'));
 
             if (selectedProducts.has(productId)) {
-                // Si el producto ya está en el carrito, aumenta la cantidad
+                // Si el producto ya está en el carrito
                 const product = selectedProducts.get(productId);
                 product.cantidad++;
             } else {
-                // Si es un nuevo producto, crea una entrada en el carrito
+                // Si es un nuevo producto
                 selectedProducts.set(productId, {
                     id: productId,
-                    nombre: button.previousElementSibling.previousElementSibling.textContent.trim(),
+                    nombre: button.closest('.producto-card').querySelector('h3').textContent.trim(),
                     cantidad: 1,
                     precio: productPrecio,
                 });
             }
 
             renderCart();
+            obtenerPost();
         });
     });
 
-    // Función para remover un producto del carrito
+    function calcularTotalCompra() {
+        let total = 0;
+        selectedProducts.forEach((product) => {
+            total += calcularPrecioTotal(product);
+        });
+        return total;
+    }
+
+    let datosLlenados = false;
+
+    purchase.addEventListener('click', () => {
+        if (selectedProducts.size === 0) {
+            Swal.fire({
+                text: 'No hay productos en el carrito',
+                icon: 'error',
+                timer: 2000,
+                position: 'center'
+            });
+        } else if (datosLlenados) {
+            Swal.fire('Ya has llenado los datos necesarios, en breve nos pondremos en contacto', '', 'info');
+            
+        } else {
+            const totalPrecioSinIVA = calcularTotalCompraSinIVA();
+            const totalCompra = totalPrecioSinIVA * 1.13;
+
+            Swal.fire({
+                title: '<strong>Gracias, enviaremos su pedido.</strong>',
+                html: `El total de su compra es de: <strong style="font-size: 20px;">$${totalCompra.toFixed(2)}</strong><br><br>
+                <input id="nombreCompleto" type="text" placeholder="Nombre Completo" style="margin: 5px 0; padding: 5px;">
+                <input id="numeroTelefono" type="text" placeholder="Número de Teléfono" style="margin: 5px 0; padding: 5px;">`,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true,
+                customClass: {
+                    popup: 'popup-card',
+                    confirmButton: 'purchase',
+                    cancelButton: 'btn_clear'
+                },
+                preConfirm: () => {
+                    const nombreCompleto = document.getElementById('nombreCompleto').value;
+                    const numeroTelefono = document.getElementById('numeroTelefono').value;
+                    if (!nombreCompleto || !numeroTelefono) {
+                        Swal.showValidationMessage('Por favor, complete ambos campos.');
+                    } else {
+                        datosLlenados = true; 
+                    }
+                    return { nombreCompleto, numeroTelefono };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const { nombreCompleto, numeroTelefono } = result.value;
+                    if (nombreCompleto && numeroTelefono) {
+                        Swal.fire('Gracias en breve te contactaremos', '', 'success');
+                        datosLlenados = true; 
+                    }
+                }
+            });
+        }
+    });
+
+    function calcularTotalCompraSinIVA() {
+        let totalPrecioSinIVA = 0;
+        selectedProducts.forEach((product) => {
+            totalPrecioSinIVA += calcularPrecioTotal(product);
+        });
+        return totalPrecioSinIVA;
+    }
+
+    // Quitar producto
     window.removeItem = function (productId) {
         if (selectedProducts.has(productId)) {
             selectedProducts.delete(productId);
+            renderCart();
         }
-        // Actualiza la lista de productos seleccionados
-        renderCart();
     };
 
-    // Función para disminuir la cantidad de un producto en el carrito
+    // Quitar cantidad
     window.decreaseQuantity = function (productId) {
         if (selectedProducts.has(productId)) {
             const product = selectedProducts.get(productId);
             if (product.cantidad > 1) {
                 product.cantidad--;
+                renderCart(); 
             } else {
                 selectedProducts.delete(productId);
+                renderCart();
             }
         }
-        
-        renderCart();
     };
 
-    // Función para aumentar la cantidad de un producto en el carrito
+    // Aumentar cantidad
     window.addQuantity = function (productId) {
         if (selectedProducts.has(productId)) {
             const product = selectedProducts.get(productId);
             product.cantidad++;
+            renderCart();
         }
-        
-        renderCart();
     };
 
-    // Manejar el botón de limpiar carrito
+    // Limpiar carrito
     clearCartButton.addEventListener('click', () => {
         selectedProducts.clear();
-        localStorage.removeItem('cart'); 
-       
+        localStorage.removeItem('cart');
         renderCart();
+        postList.innerHTML = '';  
+        datosLlenados = false;
+        // document.getElementById('nombreCompleto').value = ''; 
+        // document.getElementById('numeroTelefono').value = '';
     });
+    
+    
 
     renderCart();
+
+    let postList = document.getElementById("post-list");
+
+    async function obtenerPost() {
+        const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+        if (!response.ok) {
+            throw new Error("No se puede obtener el post");
+        }
+
+        const data = await response.json();
+        mostrarPosts(data);
+    }
+
+    function mostrarPosts(posts) {
+        const indiceAleatorio = Math.floor(Math.random() * posts.length);
+        const comentarioAleatorio = posts[indiceAleatorio];
+
+        const ul = document.createElement('ul');
+        ul.classList.add('post-list');
+
+        const li = document.createElement('li');
+        li.classList.add('post-card');
+
+        const title = document.createElement('h3');
+        title.textContent = comentarioAleatorio.title.charAt(0).toUpperCase() + comentarioAleatorio.title.slice(1);
+
+        const body = document.createElement('p');
+        body.textContent = comentarioAleatorio.body.charAt(0).toUpperCase() + comentarioAleatorio.body.slice(1);
+
+        li.appendChild(title);
+        li.appendChild(body);
+
+        ul.appendChild(li);
+
+        postList.innerHTML = '';
+        postList.appendChild(ul);
+    }
 });
