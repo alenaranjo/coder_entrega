@@ -118,7 +118,13 @@ body {
     height: 100vh;
 }
 
+#main-title {
+    font-size: 1.8rem;
+    padding: 0 0 2px 0;
+}
+
 #productos_disponibles {
+    font-size: 1.2rem;
     padding: 0 0 20px 0;
 }
 
